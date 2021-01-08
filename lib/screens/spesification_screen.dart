@@ -225,15 +225,8 @@ class _SpesificationScreenState extends State<SpesificationScreen> {
       builder: (context, snapshot) {
         if(!snapshot.hasData) return Container();
         var data = json.decode(snapshot.data);
-        return InkWell(
-              onTap: () async{
-                String url = "${data['link']}";
-                if (await canLaunch(url))
-                  await launch(url);
-                else 
-                  throw "Could not launch $url";
-              },
-              child: Padding(
+        data = data;
+        return Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20, top: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -252,44 +245,56 @@ class _SpesificationScreenState extends State<SpesificationScreen> {
                       Container(
                         height: height * 0.3,
                         width: width * 1.0,
-                        child: ListView(
+                        child: ListView.builder(
+                          itemCount: data.length,
                           scrollDirection: Axis.horizontal,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: height * 0.2,
-                                  width: width * 0.5,
-                                  child: Image.network("${data['file_name']}",
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  width: width * 0.5,
-                                  child: Text(
-                                    "${data['headline']}", 
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Color.fromRGBO(112, 112, 112, 1),
-                                      fontWeight: FontWeight.w900,
+                          itemBuilder: (context, index){
+                            return InkWell(
+                              onTap: () async{
+                                String url = "${data[index]['link']}";
+                                if (await canLaunch(url))
+                                  await launch(url);
+                                else 
+                                  throw "Could not launch $url";
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: height * 0.2,
+                                      width: width * 0.5,
+                                      child: Image.network("${data[index]['file_name']}",
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                    overflow: TextOverflow.clip,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: width * 0.5,
+                                      child: Text(
+                                        "${data[index]['headline']}", 
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Color.fromRGBO(112, 112, 112, 1),
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                        overflow: TextOverflow.clip,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
                   ),
-              ),
-        );
+              );
       }
     );
   }

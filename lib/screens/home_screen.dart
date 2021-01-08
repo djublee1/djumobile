@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SpesificationScreen(id: "124",)),
+                            builder: (context) => SpesificationScreen(id: "136",)),
                       );
                     },
                     child: Container(
